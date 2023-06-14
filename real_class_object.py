@@ -218,10 +218,10 @@ class data_profile_streamlit:
             
             st.text(f'this is the coulumn you choose for the aggregate by - {agg_name}')
             
-            agg = st.selectbox("Choose the aggreagation you want to do on the dataframe", ("select one ", "sum", "count"))
+            agg = st.selectbox("Choose the aggreagation you want to do on the dataframe", ("select one", "sum", "count", "mean","median","std","var","mad","prod", "max", "min"))
             
-            if agg == "sum": 
-                sum_grouped = data.groupby(group_name, as_index=False)[agg_name].sum()
+            if agg !="select one": 
+                sum_grouped =eval(f"data.groupby('{group_name}', as_index=False)['{agg_name}'].{agg}()")
                 st.dataframe(sum_grouped)
             
                 if st.checkbox("would you like to plot the data"):
@@ -231,16 +231,6 @@ class data_profile_streamlit:
                         ax1.bar_label(bars)
                     st.pyplot()
                     
-            if agg == "count": 
-                count_grouped = data.groupby(group_name, as_index=False)[agg_name].count()
-                st.dataframe(count_grouped)
-                if st.checkbox("would you like to plot the data"):
-                    st.set_option('deprecation.showPyplotGlobalUse', False)
-                    ax = sns.barplot(x = group_name,y= agg_name ,data = count_grouped)
-                    for bars in ax.containers:
-                        ax.bar_label(bars)
-                    st.pyplot()
-            
             
 
             
